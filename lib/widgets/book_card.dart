@@ -4,9 +4,8 @@ import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 
 class BookCard extends StatelessWidget {
   const BookCard(
-      {Key? key, required this.bookTitle, required this.imagePath, this.ontap})
+      {Key? key, required this.imagePath, this.ontap})
       : super(key: key);
-  final String bookTitle;
   final String imagePath;
   final void Function()? ontap;
 
@@ -14,39 +13,18 @@ class BookCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: ontap,
-      child: Container(
-        width: 50,
-        padding: const EdgeInsets.all(10),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(10),
-          boxShadow: const [
-            BoxShadow(
-              color: Colors.grey,
-              blurRadius: 3.0, // soften the shadow
-              spreadRadius: 1.0, //extend the shadow
-              offset: Offset(
-                -3.0, // Move to right 3  horizontally
-                -3.0, // Move to bottom 3 Vertically
-              ),
-            )
-          ],
-        ),
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Image.asset(
-                imagePath,
-                fit: BoxFit.contain,
-                height: 100,
-              ),
-            ),
-            Text(
-              bookTitle,
-              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-            ),
-          ],
+      child: ClipRRect(
+        child:Container(
+          padding: EdgeInsets.all(5),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(15),
+            color: Colors.white
+          ),
+          child: Image.asset(
+            imagePath,
+            height: 180,
+            fit: BoxFit.cover,
+          ),
         ),
       ),
     );
@@ -65,17 +43,15 @@ class _BookListState extends State<BookList> {
   Widget build(BuildContext context) {
     return GridView.count(
       crossAxisCount: 2,
-      crossAxisSpacing: 15,
-      padding: const EdgeInsets.all(10),
+      crossAxisSpacing: 25,
+      padding: const EdgeInsets.all(0),
       mainAxisSpacing: 15,
       children:  [
         const BookCard(
-          bookTitle: "English Book 1",
-          imagePath: "assets/images/english.png",
+          imagePath: "assets/images/book-cover-1.png",
         ),
         BookCard(
-            bookTitle: "Math Book 1",
-            imagePath: "assets/images/math.png",
+            imagePath: "assets/images/book-cover-2.png",
             ontap: ()  {
               Navigator.push(
                 context,
@@ -83,17 +59,10 @@ class _BookListState extends State<BookList> {
               );}
         ),
         const BookCard(
-            bookTitle: "Science Book 1",
-            imagePath: "assets/images/science.png"),
+            imagePath: "assets/images/book-cover-3.png",
+        ),
         const BookCard(
-            bookTitle: "English Book 2",
-            imagePath: "assets/images/english.png"),
-        const BookCard(
-            bookTitle: "Science Book 1",
-            imagePath: "assets/images/science.png"),
-        const BookCard(
-            bookTitle: "English Book 2",
-            imagePath: "assets/images/english.png"),
+            imagePath: "assets/images/book-cover-4.png"),
       ],
     );
   }

@@ -1,3 +1,6 @@
+import 'dart:ui';
+
+import 'package:audioplayers/audioplayers.dart';
 import 'package:cheetahflipbook/widgets/book_card.dart';
 import 'package:flutter/material.dart';
 
@@ -10,39 +13,46 @@ class Dashboard extends StatefulWidget {
   State<Dashboard> createState() => _DashboardState();
 }
 
+
+
 class _DashboardState extends State<Dashboard> {
+  final audioPlayer= AudioPlayer();
+  PlayerState audioPlayerState = PlayerState.PLAYING;
+  late AudioCache audioCache;
+  String path = "Jarvis Peaceful Reggae.wav";
+
+
+  @override
+  void dispose(){
+    audioPlayer.dispose();
+    audioPlayer.release();
+    audioCache.clearAll();
+    super.dispose();
+  }
+  @override
+  void initState(){
+    super.initState();
+    audioCache = AudioCache(fixedPlayer: audioPlayer);
+    audioPlayer.onPlayerStateChanged.listen((PlayerState s) {
+      setState((){
+       audioPlayerState = s;
+      });
+    });
+  }
+
+  playMusic() async{
+    await audioCache.loop(path);
+
+  }
+  pauseMusic() async{
+    await audioPlayer.pause();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.green[600],
-      endDrawer: const MainDrawer(),
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(100),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
-          child: AppBar(
-            iconTheme: const IconThemeData(color: Colors.black, size: 30),
-            elevation:0,
-            title: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(40.0),
-                  child: Image.asset(
-                    'assets/images/girlprofilepic.jpg',
-                    height: 55,
-                    width: 55,
-                    fit: BoxFit.cover,
-                  ),
-                ),
-                const Icon(Icons.search),
-              ],
-            ),
-            backgroundColor: Colors.transparent,
-          ),
-        ),
-      ),
-      body:Container(
+    return Stack(
+      children: [
+        Container(
           decoration: const BoxDecoration(
               image: DecorationImage(
                   fit: BoxFit.cover,
@@ -50,40 +60,51 @@ class _DashboardState extends State<Dashboard> {
                     "assets/images/jungle-background-1.jpg",
                   )
               )
-          ),
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 20.0),
-              child: Align(
-                alignment: Alignment.centerLeft,
+          ),),
+       /* BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 6.0, sigmaY: 6.0),
+          child: Container(),
+        ),*/
+        Scaffold(
+              backgroundColor: Colors.transparent,
+              body:Center(
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: const [
-                    Text(
-                      "Hello",
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 20,
-                          fontWeight: FontWeight.w300),
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const SizedBox(height:20),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const SizedBox(width:100,),
+                        Image.asset(
+                          "assets/images/cheetah-logo-no-bg.png",
+                          height: 200,
+                        ),
+                        const SizedBox(width:30,),
+                        InkWell(
+                          onTap: () {
+                            audioPlayerState == PlayerState.PLAYING ? pauseMusic():playMusic();
+                          },
+                          child: Icon(
+                            audioPlayerState == PlayerState.PLAYING ? Icons.volume_up_sharp: Icons.volume_off_sharp,
+                            size: 80,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ],
                     ),
-                    Text(
-                      "Kerry-Ann",
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 35,
-                          fontWeight: FontWeight.w600),
-                    )
+                    Expanded(
+                      child: Container(
+                        padding: const EdgeInsets.only(top:10),
+                        width: 550,
+                          child: const BookList(),
+                            ),
+                    ),
                   ],
                 ),
               ),
-            ),
-            const Expanded(
-              child: BookList()
-            )
-          ],
         ),
-      ),
+      ],
     );
   }
 }

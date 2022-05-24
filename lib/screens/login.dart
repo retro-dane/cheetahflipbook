@@ -16,7 +16,7 @@ class Login extends StatelessWidget {
             height: 100,
           ),
 
-          Container(
+          SizedBox(
             height: 150,
             child: Image.asset(
               "assets/images/CHEETAH Logo (Chasing and Capturing Your Dreams.jpg",
@@ -92,11 +92,8 @@ class Login extends StatelessWidget {
           ),
 
           Expanded(
-            child: Container(
-              height: 80,
-              child: Image.asset(
-                  "assets/images/clipart.png",
-              ),
+            child: Image.asset(
+                "assets/images/clipart.png",
             ),
           )
         ],
@@ -119,7 +116,7 @@ class LoginForm extends StatelessWidget {
               child: TextFormField(
                 textInputAction: TextInputAction.next,
                 decoration:  InputDecoration(
-                  labelText: "Username",
+                  labelText: "KerryAnn123",
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(20),
                     borderSide: BorderSide(width: 1.5,color:Colors.red),
@@ -137,7 +134,7 @@ class LoginForm extends StatelessWidget {
               child: TextFormField(
                 textInputAction: TextInputAction.done,
                 decoration: InputDecoration(
-                  labelText: "Password",
+                  labelText: "**********",
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(20),
                       borderSide: BorderSide(width: 1.5,color:Colors.red),
