@@ -36,6 +36,9 @@ dependencies:
   cupertino_icons: ^1.0.2
   syncfusion_flutter_pdfviewer: ^20.1.56-beta
   audioplayers: ^0.20.1
+  dio: ^4.0.6
+  path_provider: ^2.0.10
+  open_file: ^3.2.1
 
 dev_dependencies:
   flutter_test:

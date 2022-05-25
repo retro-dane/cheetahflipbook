@@ -2,7 +2,7 @@
     package="com.example.cheetahflipbook">
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
    <application
-        android:label="cheetahflipbook"
+        android:label="Early Childhood Math 3 "
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

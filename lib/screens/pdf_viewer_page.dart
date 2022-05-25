@@ -1,25 +1,31 @@
-
-
 import 'package:audioplayers/audioplayers.dart';
+import 'package:cheetahflipbook/widgets/book_drawer.dart';
+import 'package:cheetahflipbook/widgets/dashboard_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 
 class PDFViewerPage extends StatefulWidget {
-  const PDFViewerPage({Key? key}) : super(key: key);
+ final String? booklocation;
+
+  const PDFViewerPage({
+    Key? key, required this.booklocation, }) : super(key: key);
+
+
 
   @override
   State<PDFViewerPage> createState() => _PDFViewerPageState();
 }
 
-class _PDFViewerPageState extends State<PDFViewerPage> {
+class _PDFViewerPageState extends State<PDFViewerPage>  {
 
   late PdfViewerController _pdfViewerController;
+  late PdfPageLayoutMode layoutMode = PdfPageLayoutMode.single;
   final GlobalKey<SfPdfViewerState> _pdfViewerKey = GlobalKey();
-
   final audioPlayer= AudioPlayer();
   PlayerState audioPlayerState = PlayerState.PAUSED;
   late AudioCache audioCache;
   String path = "page-flip-01a.mp3";
+
 
 
   @override
@@ -50,17 +56,33 @@ class _PDFViewerPageState extends State<PDFViewerPage> {
 
   @override
   Widget build(BuildContext context) {
+    var isPortrait = MediaQuery.of(context).orientation == Orientation.portrait;
     return Scaffold(
+      drawer: const BookDrawer(),
       appBar:AppBar(
         centerTitle: true,
-        toolbarHeight: 50,
-        backgroundColor: Colors.deepOrange,
-        title: const Text("Early Childhood Math Activity Workbook"),
+        toolbarHeight: 70,
+        backgroundColor: Colors.orange,
+        title:  Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children:  [
+            Image.asset("assets/images/cheetah-logo-no-bg.png",height: 60,),
+             FittedBox(
+              fit: BoxFit.fitWidth,
+                child: Text(
+                  widget.booklocation!.substring(7),
+                  softWrap: true,
+                  maxLines:2,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold
+                  ),
+                )),
+          ],
+        ),
         actions: <Widget>[
-
           IconButton(
             onPressed:(){
-
                 playMusic();
                 previous2Pages(_pdfViewerController);
             },
@@ -81,38 +103,38 @@ class _PDFViewerPageState extends State<PDFViewerPage> {
           ),
         ],
       ),
-      backgroundColor: Colors.white,
-      body:Stack(
+      backgroundColor: Colors.grey[350],
+      body:Stack  (
         children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal:50),
+          Container(
+            margin: const EdgeInsets.symmetric(horizontal:120),
             child: SfPdfViewer.asset(
-              "assets/Workbook 1.pdf",
+              widget.booklocation!,
               key: _pdfViewerKey,
+              pageSpacing:12,
               controller: _pdfViewerController,
               canShowScrollHead:true,
               canShowScrollStatus: false,
               scrollDirection:PdfScrollDirection.horizontal,
-              pageLayoutMode: PdfPageLayoutMode.continuous,
+              pageLayoutMode:PdfPageLayoutMode.continuous,
             ),
           ),
-          Positioned(
-              top:280,
-              right:1190,
-              child: InkWell(
-                child:const Icon(
-                  Icons.keyboard_arrow_left,
-                  color: Colors.black54,
-                  size:130,
-                ),
-                onTap: () {
-                  playMusic();
-               previous2Pages(_pdfViewerController);
-                },
-              ), ),
-          Positioned(
-            left:1190,
-            top: 280,
+          Align(
+            alignment: Alignment.centerLeft,
+            child: InkWell(
+              child:const Icon(
+                Icons.keyboard_arrow_left,
+                color: Colors.black54,
+                size:130,
+              ),
+              onTap: () {
+                playMusic();
+                isPortrait ? _pdfViewerController.previousPage() :  previous2Pages(_pdfViewerController);
+              },
+            ),
+          ),
+          Align(
+            alignment: Alignment.centerRight,
             child: InkWell(
               child:  const Icon(
                 Icons.keyboard_arrow_right,
@@ -121,7 +143,7 @@ class _PDFViewerPageState extends State<PDFViewerPage> {
               ),
               onTap: () {
                   playMusic();
-              next2Pages(_pdfViewerController);
+                  isPortrait ? _pdfViewerController.nextPage() :  next2Pages(_pdfViewerController);
               },
             ),
           ),
@@ -130,6 +152,15 @@ class _PDFViewerPageState extends State<PDFViewerPage> {
     );
   }
 }
+
+/*
+TODO: Implement dual page book view programmatically
+List<PdfPageLayoutMode> doublepageview(List<PdfPageLayoutMode> doubleview){
+  for (int x =0; x<2;x++){
+    doubleview = [PdfPageLayoutMode.single];
+  }
+  return doubleview;
+}*/
 
 void next2Pages(PdfViewerController currentPage){
   for (int x =0; x<1;x++){

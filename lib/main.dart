@@ -1,6 +1,4 @@
 import 'package:cheetahflipbook/screens/dashboard.dart';
-import 'package:cheetahflipbook/screens/login.dart';
-import 'package:cheetahflipbook/screens/pdf_viewer_page.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -19,7 +17,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const Login(),
+      home: const Dashboard(),
     );
   }
 }
